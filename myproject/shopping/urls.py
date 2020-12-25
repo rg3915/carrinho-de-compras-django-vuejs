@@ -1,3 +1,10 @@
-from django.shortcuts import render
+from django.urls import path
+from myproject.shopping import views as v
 
-# Create your views here.
+
+app_name = 'shopping'
+
+
+urlpatterns = [
+    # path('', v.index, name='index'),
+]
