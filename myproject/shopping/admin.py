@@ -1,20 +1,26 @@
 from django.contrib import admin
-from .models import Compra, Produto, Carrinho
+from .models import Shop, Product, Cart
 
 
-@admin.register(Compra)
-class CompraAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'data')
-    search_fields = ('cliente',)
+class CartInline(admin.TabularInline):
+    model = Cart
+    extra = 0
 
 
-@admin.register(Produto)
-class ProdutoAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'preco')
-    search_fields = ('nome',)
+@admin.register(Shop)
+class ShopAdmin(admin.ModelAdmin):
+    inlines = (CartInline,)
+    list_display = ('__str__', 'created')
+    search_fields = ('customer',)
 
 
-@admin.register(Carrinho)
-class CarrinhoAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'compra', 'quantidade', 'preco')
-    search_fields = ('compra__cliente', 'produto__nome')
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'price')
+    search_fields = ('name',)
+
+
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'shop', 'quantity', 'price')
+    search_fields = ('shop__customer', 'product__name')
