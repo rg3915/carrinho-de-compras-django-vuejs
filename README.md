@@ -6,6 +6,9 @@ Este projeto é similar ao de [vendas](https://github.com/rg3915/vendas) onde te
 
 ![tables](https://raw.githubusercontent.com/rg3915/vendas/master/modelling/tables.jpg)
 
+Mas vamos usar nosso próprio modelo simplificado.
+
+![tabelas](tabelas.png)
 
 ## Objetivo
 
