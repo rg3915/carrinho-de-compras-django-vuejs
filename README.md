@@ -7,9 +7,15 @@ Este projeto é similar ao de [vendas](https://github.com/rg3915/vendas) onde te
 ![tables](https://raw.githubusercontent.com/rg3915/vendas/master/modelling/tables.jpg)
 
 
+## Objetivo
+
+Nosso objetivo é desenhar essa tela:
+
+![mockup](mockup.png)
+
 ## Técnica
 
-Usaremos o [VueJS](https://vuejs.org/) via CDN(https://cdn.jsdelivr.net/npm/vue/dist/vue.js) utilizando a técnica descrita no video [Django e VueJS #01 - arquivos estáticos via cdn](https://www.youtube.com/watch?v=KOMER5MhBlY), onde o VueJS será usado como arquivo estático dentro da pasta `/static/js/`.
+Usaremos o [VueJS](https://vuejs.org/) via [CDN](https://cdn.jsdelivr.net/npm/vue/dist/vue.js) utilizando a técnica descrita no video [Django e VueJS #01 - arquivos estáticos via cdn](https://www.youtube.com/watch?v=KOMER5MhBlY), onde o VueJS será usado como arquivo estático dentro da pasta `/static/js/`.
 
 Neste caso teremos conflito de delimitadores. Para resolver isso usamos o seguinte delimitador no VueJS:
 
