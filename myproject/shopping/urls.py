@@ -6,5 +6,5 @@ app_name = 'shopping'
 
 
 urlpatterns = [
-    # path('', v.index, name='index'),
+    path('shopping/', v.shopping, name='shopping'),
 ]
