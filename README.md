@@ -100,10 +100,12 @@ urlpatterns = [
 ]
 ```
 
-```html
+```
 mkdir -p myproject/shopping/templates
 touch myproject/shopping/templates/shopping.html
+```
 
+```html
 {% extends "base.html" %}
 
 {% block content %}
