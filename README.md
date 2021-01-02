@@ -304,5 +304,6 @@ touch myproject/shopping/templates/shopping.html
 ```
 mkdir -p myproject/core/static/{css,js}
 touch myproject/core/static/css/style.css
+touch myproject/core/static/js/app.js
 ```
 

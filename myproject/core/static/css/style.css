@@ -12,6 +12,9 @@ hr {
   padding-top: 0;
   padding-bottom: 0;
 }
+.w40 {
+  width: 40%;
+}
 .close {
   color: red;
 }
