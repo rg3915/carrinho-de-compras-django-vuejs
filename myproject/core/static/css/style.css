@@ -12,11 +12,6 @@ hr {
   padding-top: 0;
   padding-bottom: 0;
 }
-.edit {
-  color: #007bff;
-}
 .close {
   color: red;
-  margin-left: 5px;
-  cursor: pointer;
 }

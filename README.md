@@ -152,7 +152,7 @@ touch myproject/shopping/templates/shopping.html
                   <input class="form-control" type="number" min="0" placeholder="32,80">
                 </div>
               </td>
-              <td style="width: 100px">
+              <td>
                 <button class="btn btn-success">
                   <i class="fa fa-plus"></i>
                 </button>
@@ -188,9 +188,10 @@ touch myproject/shopping/templates/shopping.html
                   <input class="form-control" type="number" min="0" placeholder="32,80">
                 </div>
               </td>
-              <td style="width: 100px">
-                <i class="fa fa-pencil fa-lg edit"></i>
-                <i class="fa fa-close fa-lg close"></i>
+              <td>
+                <button class="btn btn-link">
+                  <i class="fa fa-close close"></i>
+                </button>
               </td>
             </tr>
 
@@ -217,9 +218,10 @@ touch myproject/shopping/templates/shopping.html
                   <input class="form-control" type="number" min="0" placeholder="32,80">
                 </div>
               </td>
-              <td style="width: 100px">
-                <i class="fa fa-pencil fa-lg edit"></i>
-                <i class="fa fa-close fa-lg close"></i>
+              <td>
+                <button class="btn btn-link">
+                  <i class="fa fa-close close"></i>
+                </button>
               </td>
             </tr>
 
@@ -246,9 +248,10 @@ touch myproject/shopping/templates/shopping.html
                   <input class="form-control" type="number" min="0" placeholder="32,80">
                 </div>
               </td>
-              <td style="width: 100px">
-                <i class="fa fa-pencil fa-lg edit"></i>
-                <i class="fa fa-close fa-lg close"></i>
+              <td>
+                <button class="btn btn-link">
+                  <i class="fa fa-close close"></i>
+                </button>
               </td>
             </tr>
 
@@ -275,7 +278,7 @@ touch myproject/shopping/templates/shopping.html
                   <input class="form-control" type="number" min="0" placeholder="32,80">
                 </div>
               </td>
-              <td style="width: 100px">
+              <td>
                 <button class="btn btn-success">
                   <i class="fa fa-plus"></i>
                 </button>
