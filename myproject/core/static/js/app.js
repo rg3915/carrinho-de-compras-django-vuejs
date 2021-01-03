@@ -9,6 +9,9 @@ var app = new Vue({
   el: '#app',
   delimiters: ['${', '}'],
   data: {
+    form: {
+      customer: null
+    },
     cartItems: [],
     currentProduct: {
       name: null,
@@ -26,18 +29,18 @@ var app = new Vue({
   computed: {
     cartValue() {
       return this.cartItems.reduce((prev, curr) => {
-        return prev + (curr.price * curr.quantity);
-      }, 0).toFixed(2);
+        return prev + (curr.price * curr.quantity)
+      }, 0).toFixed(2)
     }
   },
   methods: {
     addProduct() {
-      this.cartItems.push(this.currentProduct);
+      this.cartItems.push(this.currentProduct)
       this.currentProduct = {
         name: null,
         quantity: 0,
         price: 0.0
-      };
+      }
     },
     addLine() {
       this.cartItems.push(
@@ -46,11 +49,22 @@ var app = new Vue({
           quantity: 0,
           price: 0.0
         }
-      );
+      )
     },
     deleteProduct(item) {
       var idx = this.cartItems.indexOf(item)
       this.cartItems.splice(idx, 1)
+    },
+    resetForm() {
+      this.form = {
+        customer: null
+      }
+      this.cartItems = []
+      this.currentProduct = {
+        name: null,
+        quantity: 0,
+        price: 0.0
+      }
     }
   }
 })
