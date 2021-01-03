@@ -114,7 +114,12 @@
           </tbody>
           <tfoot>
             <tr class="lead">
-              <th colspan="3" class="text-right">Total</th>
+              <th class="text-left">
+                <button class="btn btn-success" @click="addLine">
+                  <i class="fa fa-plus"></i> Adicionar
+                </button>
+              </th>
+              <th colspan="2" class="text-right">Total</th>
               <th class="text-left">R$ <span class="pull-right">${ cartValue | formatPrice }</span></th>
             </tr>
           </tfoot>

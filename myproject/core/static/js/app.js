@@ -39,6 +39,15 @@ var app = new Vue({
         price: 0.0
       };
     },
+    addLine() {
+      this.cartItems.push(
+        {
+          name: null,
+          quantity: 0,
+          price: 0.0
+        }
+      );
+    },
     deleteProduct(item) {
       var idx = this.cartItems.indexOf(item)
       this.cartItems.splice(idx, 1)
