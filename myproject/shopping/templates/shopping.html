@@ -37,12 +37,10 @@
                   <input class="form-control" type="number" min="0" placeholder="2,05">
                 </div>
               </td>
-              <td>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">R$</span>
-                  </div>
-                  <input class="form-control" type="number" min="0" placeholder="32,80">
+              <td class="w15">
+                <div class="d-flex input-group mb-3">
+                  <div>R$</div>
+                  <div class="ml-auto">32,80</div>
                 </div>
               </td>
               <td>
@@ -73,12 +71,10 @@
                   <input class="form-control" type="number" min="0" step="0.01" :value="[[ cart.price ]]">
                 </div>
               </td>
-              <td>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">R$</span>
-                  </div>
-                  <input class="form-control" type="number" min="0" step="0.01" :value="[[ (cart.price * cart.quantity) | formatPrice ]]">
+              <td class="w15">
+                <div class="d-flex input-group mb-3">
+                  <div>R$</div>
+                  <div class="ml-auto">${ (cart.price * cart.quantity) | formatPrice }</div>
                 </div>
               </td>
               <td>
@@ -103,12 +99,10 @@
                   <input class="form-control" type="number" min="0" placeholder="2,05">
                 </div>
               </td>
-              <td>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">R$</span>
-                  </div>
-                  <input class="form-control" type="number" min="0" placeholder="32,80">
+              <td class="w15">
+                <div class="d-flex input-group mb-3">
+                  <div>R$</div>
+                  <div class="ml-auto">32,80</div>
                 </div>
               </td>
               <td>
@@ -121,7 +115,7 @@
           <tfoot>
             <tr class="lead">
               <th colspan="3" class="text-right">Total</th>
-              <th class="text-left">R$ <span class="pull-right">${ cartValue }</span></th>
+              <th class="text-left">R$ <span class="pull-right">${ cartValue | formatPrice }</span></th>
             </tr>
           </tfoot>
         </table>

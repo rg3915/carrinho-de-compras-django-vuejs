@@ -12,8 +12,8 @@ var app = new Vue({
     cartItems: [
       {id: 1, product: 'Caneta azul', quantity: 10, price: 2.05},
       {id: 2, product: 'Caneta vermelha', quantity: 16, price: 2.05},
-      {id: 3, product: 'Caneta preta', quantity: 12, price: 2.05},
-      {id: 4, product: 'Caneta verde', quantity: 5, price: 2.055}
+      {id: 3, product: 'Caneta preta', quantity: 1200, price: 2.05},
+      {id: 4, product: 'Caneta verde', quantity: 100, price: 2.05}
     ],
     products: []
   },
