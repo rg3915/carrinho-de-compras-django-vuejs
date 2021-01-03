@@ -54,21 +54,21 @@
 
         <hr>
 
-        <table class="table table-hover table-borderless">
+        <table id="myTable" class="table table-hover table-borderless">
           <tbody>
             <tr v-for="(cart, i) in cartItems" :key="i">
               <td class="w40">
-                <input class="form-control" type="text" v-model="cart.name" />
+                <input :id="'name'+i" class="form-control" type="text" v-model="cart.name" />
               </td>
               <td>
-                <input class="form-control text-center" type="number" min="0" v-model="cart.quantity" />
+                <input :id="'quantity'+i" class="form-control text-center" type="number" min="0" v-model="cart.quantity" />
               </td>
               <td>
                 <div class="input-group mm-2">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">R$</span>
                   </div>
-                  <input class="form-control" type="number" min="0" step="0.01" v-model="cart.price" />
+                  <input :id="'price'+i" class="form-control" type="number" min="0" step="0.01" v-model="cart.price" />
                 </div>
               </td>
               <td class="w15">
@@ -115,7 +115,7 @@
           <tfoot>
             <tr class="lead">
               <th class="text-left">
-                <button class="btn btn-success" @click="addLine">
+                <button id="btnAddLine" class="btn btn-success" @click="addLine">
                   <i class="fa fa-plus"></i> Adicionar
                 </button>
               </th>
