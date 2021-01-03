@@ -58,17 +58,17 @@
           <tbody>
             <tr v-for="(cart, i) in cartItems" :key="i">
               <td class="w40">
-                <input class="form-control" type="text" :value="[[ cart.name ]]" />
+                <input class="form-control" type="text" v-model="cart.name" />
               </td>
               <td>
-                <input class="form-control text-center" type="number" min="0" :value="[[ cart.quantity ]]" />
+                <input class="form-control text-center" type="number" min="0" v-model="cart.quantity" />
               </td>
               <td>
                 <div class="input-group mm-2">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">R$</span>
                   </div>
-                  <input class="form-control" type="number" min="0" step="0.01" :value="[[ cart.price ]]">
+                  <input class="form-control" type="number" min="0" step="0.01" v-model="cart.price" />
                 </div>
               </td>
               <td class="w15">
@@ -79,7 +79,7 @@
               </td>
               <td>
                 <button class="btn btn-link">
-                  <i class="fa fa-close close"></i>
+                  <i class="fa fa-close close" @click="deleteProduct(cart)"></i>
                 </button>
               </td>
             </tr>

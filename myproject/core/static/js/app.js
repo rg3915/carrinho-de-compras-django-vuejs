@@ -38,6 +38,10 @@ var app = new Vue({
         quantity: 0,
         price: 0.0
       };
+    },
+    deleteProduct(item) {
+      var idx = this.cartItems.indexOf(item)
+      this.cartItems.splice(idx, 1)
     }
   }
 })
