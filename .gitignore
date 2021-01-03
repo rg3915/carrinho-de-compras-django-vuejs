@@ -6,6 +6,5 @@ __pycache__/
 .venv/
 staticfiles/
 .ipynb_checkpoints/
-cypress*
 node_modules/
 package*
