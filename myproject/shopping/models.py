@@ -26,6 +26,13 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def to_dict(self):
+        return {
+            'pk': self.pk,
+            'name': self.name,
+            'price': self.price
+        }
+
 
 class Cart(models.Model):
     shop = models.ForeignKey(

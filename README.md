@@ -88,8 +88,7 @@ from django.shortcuts import render
 
 def shopping(request):
     template_name = 'shopping.html'
-    context = {}
-    return render(request, template_name, context)
+    return render(request, template_name)
 ```
 
 ```python
@@ -442,5 +441,45 @@ Versão com ajustes de CSS:
 {% block js %}
   <script src="{% static 'js/app.js' %}"></script>
 {% endblock js %}
+```
+
+
+Adicione uma nova rota em `core/urls.py`
+
+```python
+    path('api/product/', v.api_product, name='api_product'),
+```
+
+Em `core/views.py`
+
+```python
+from django.shortcuts import render
+from django.http import JsonResponse
+from myproject.shopping.models import Product
+
+
+def index(request):
+    return render(request, 'index.html')
+
+
+def api_product(request):
+    products = Product.objects.all()
+    data = [item.to_dict() for item in products]
+    response = {'data': data}
+    return JsonResponse(response)
+```
+
+Em `shopping/models.py`
+
+```python
+class Product(models.Model):
+    ...
+
+    def to_dict(self):
+        return {
+            'pk': self.pk,
+            'name': self.name,
+            'price': self.price
+        }
 ```
 
