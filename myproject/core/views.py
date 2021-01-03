@@ -35,4 +35,5 @@ def api_shopping_items_add(request):
             quantity=quantity,
             price=price
         )
-    return JsonResponse({})
+    response = {'data': shop.pk}
+    return JsonResponse(response)

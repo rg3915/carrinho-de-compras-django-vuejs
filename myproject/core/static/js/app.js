@@ -42,7 +42,7 @@ var app = new Vue({
 
       axios.post('/api/shopping-items/add/', bodyFormData)
         .then((res) => {
-          console.log(res);
+          location.href = endpoint + 'shopping/cart-items/' + res.data.data
         })
     },
     addProduct() {

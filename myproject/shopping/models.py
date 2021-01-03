@@ -59,3 +59,6 @@ class Cart(models.Model):
         if self.shop:
             return f'{self.shop.pk}-{self.pk}-{self.product}'
         return str(self.pk)
+
+    def get_subtotal(self):
+        return self.price * (self.quantity or 0)

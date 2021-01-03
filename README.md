@@ -489,3 +489,56 @@ Em `core/urls.py`
     path('api/shopping-items/add/', v.api_shopping_items_add, name='api_shopping_items_add'),
 ```
 
+Em `core/views.py`
+
+```python
+import json
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from myproject.shopping.models import Product, Shop, Cart
+
+
+@csrf_exempt
+def api_shopping_items_add(request):
+    request = request.POST
+    customer = json.loads(request.get('customer'))
+    products = json.loads(request.get('products'))
+
+    shop = Shop.objects.create(customer=customer)
+
+    for product in products:
+        product_obj = Product.objects.get(pk=product['pk'])
+        quantity = product['quantity']
+        price = product['price']
+
+        Cart.objects.create(
+            shop=shop,
+            product=product_obj,
+            quantity=quantity,
+            price=price
+        )
+    response = {'data': shop.pk}
+    return JsonResponse(response)
+```
+
+Em `shopping/urls.py`
+
+```python
+    path('cart-items/<int:pk>/', v.cart_items, name='cart_items'),
+```
+
+Em `shopping/views.py`
+
+```python
+def cart_items(request, pk):
+    template_name = 'cart_items.html'
+    carts = Cart.objects.filter(shop=pk)
+
+    qs = carts.values_list('price', 'quantity') or 0
+    total = sum(map(lambda q: q[0] * q[1], qs))
+
+    context = {'object_list': carts, 'total': total}
+    return render(request, template_name, context)
+```
+
