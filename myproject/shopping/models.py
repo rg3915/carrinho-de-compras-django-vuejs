@@ -28,8 +28,8 @@ class Product(models.Model):
 
     def to_dict(self):
         return {
-            'pk': self.pk,
-            'name': self.name,
+            'value': self.pk,
+            'text': self.name,
             'price': self.price
         }
 
@@ -38,9 +38,7 @@ class Cart(models.Model):
     shop = models.ForeignKey(
         Shop,
         related_name='compras',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
+        on_delete=models.CASCADE
     )
     product = models.ForeignKey(
         Product,
@@ -58,4 +56,6 @@ class Cart(models.Model):
         verbose_name_plural = 'carrinhos'
 
     def __str__(self):
-        return f'{self.pk}-{self.shop.pk}-{self.product}'
+        if self.shop:
+            return f'{self.shop.pk}-{self.pk}-{self.product}'
+        return str(self.pk)

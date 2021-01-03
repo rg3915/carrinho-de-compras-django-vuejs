@@ -24,7 +24,10 @@
           <tbody class="mytable">
             <tr>
               <td class="w40">
-                <input id="productName" class="form-control" type="text" v-model="currentProduct.name" />
+                <select id="productName" class="form-control" v-model="currentProduct.pk">
+                  <option selected value="">---</option>
+                  <option v-for="product in products" :key="product.value" :value="product.value">${ product.text }</option>
+                </select>
               </td>
               <td>
                 <input id="productQuantity" class="form-control text-center" type="number" min="0" v-model="currentProduct.quantity" />
@@ -58,7 +61,10 @@
           <tbody>
             <tr v-for="(cart, i) in cartItems" :key="i">
               <td class="w40">
-                <input :id="'name'+i" class="form-control" type="text" v-model="cart.name" />
+                <select :id="'name'+i" class="form-control" v-model="cart.pk">
+                  <option selected value="">---</option>
+                  <option v-for="product in products" :key="product.value" :value="product.value">${ product.text }</option>
+                </select>
               </td>
               <td>
                 <input :id="'quantity'+i" class="form-control text-center" type="number" min="0" v-model="cart.quantity" />
@@ -83,34 +89,6 @@
                 </button>
               </td>
             </tr>
-
-            <!-- <tr>
-              <td class="w40">
-                <input class="form-control" type="text" placeholder="Caneta azul" />
-              </td>
-              <td>
-                <input class="form-control text-center" type="number" min="0" placeholder="16" />
-              </td>
-              <td>
-                <div class="input-group mm-2">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">R$</span>
-                  </div>
-                  <input class="form-control" type="number" min="0" placeholder="2,05">
-                </div>
-              </td>
-              <td class="w15">
-                <div class="d-flex input-group mm-2">
-                  <div>R$</div>
-                  <div class="ml-auto">32,80</div>
-                </div>
-              </td>
-              <td>
-                <button class="btn btn-success">
-                  <i class="fa fa-plus"></i>
-                </button>
-              </td>
-            </tr> -->
           </tbody>
           <tfoot class="lead">
             <tr>
@@ -125,7 +103,7 @@
                 </button>
               </th>
               <th colspan="2" class="text-right">
-                <button id="btnSave" class="btn btn-primary" @click="">
+                <button id="btnSave" class="btn btn-primary" @click="submitForm">
                   <i class="fa fa-floppy-o"></i> Salvar
                 </button>
               </th>

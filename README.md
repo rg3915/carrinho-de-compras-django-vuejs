@@ -447,7 +447,7 @@ Versão com ajustes de CSS:
 Adicione uma nova rota em `core/urls.py`
 
 ```python
-    path('api/product/', v.api_product, name='api_product'),
+    path('api/products/', v.api_product, name='api_product'),
 ```
 
 Em `core/views.py`
@@ -477,9 +477,15 @@ class Product(models.Model):
 
     def to_dict(self):
         return {
-            'pk': self.pk,
-            'name': self.name,
+            'value': self.pk,
+            'text': self.name,
             'price': self.price
         }
+```
+
+Em `core/urls.py`
+
+```python
+    path('api/shopping-items/add/', v.api_shopping_items_add, name='api_shopping_items_add'),
 ```
 

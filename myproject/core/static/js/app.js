@@ -14,18 +14,18 @@ var app = new Vue({
     },
     cartItems: [],
     currentProduct: {
-      name: null,
+      pk: null,
       quantity: 0,
       price: 0.0
     },
     products: []
   },
-  // created() {
-  //   axios.get(endpoint + 'api/products/')
-  //     .then(response => {
-  //       this.products = response.data.data;
-  //     })
-  // }
+  mounted() {
+    axios.get(endpoint + 'api/products/')
+      .then(response => {
+        this.products = response.data.data;
+      })
+  },
   computed: {
     cartValue() {
       return this.cartItems.reduce((prev, curr) => {
@@ -34,10 +34,21 @@ var app = new Vue({
     }
   },
   methods: {
+    submitForm() {
+      let bodyFormData = new FormData();
+
+      bodyFormData.append('products', JSON.stringify(this.cartItems));
+      bodyFormData.append('customer', JSON.stringify(this.form.customer));
+
+      axios.post('/api/shopping-items/add/', bodyFormData)
+        .then((res) => {
+          console.log(res);
+        })
+    },
     addProduct() {
       this.cartItems.push(this.currentProduct)
       this.currentProduct = {
-        name: null,
+        pk: null,
         quantity: 0,
         price: 0.0
       }
@@ -45,7 +56,7 @@ var app = new Vue({
     addLine() {
       this.cartItems.push(
         {
-          name: null,
+          pk: null,
           quantity: 0,
           price: 0.0
         }
@@ -61,7 +72,7 @@ var app = new Vue({
       }
       this.cartItems = []
       this.currentProduct = {
-        name: null,
+        pk: null,
         quantity: 0,
         price: 0.0
       }
