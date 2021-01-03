@@ -9,12 +9,12 @@ var app = new Vue({
   el: '#app',
   delimiters: ['${', '}'],
   data: {
-    cartItems: [
-      {id: 1, product: 'Caneta azul', quantity: 10, price: 2.05},
-      {id: 2, product: 'Caneta vermelha', quantity: 16, price: 2.05},
-      {id: 3, product: 'Caneta preta', quantity: 1200, price: 2.05},
-      {id: 4, product: 'Caneta verde', quantity: 100, price: 2.05}
-    ],
+    cartItems: [],
+    currentProduct: {
+      name: null,
+      quantity: 0,
+      price: 0.0
+    },
     products: []
   },
   // created() {
@@ -28,6 +28,16 @@ var app = new Vue({
       return this.cartItems.reduce((prev, curr) => {
         return prev + (curr.price * curr.quantity);
       }, 0).toFixed(2);
+    }
+  },
+  methods: {
+    addProduct() {
+      this.cartItems.push(this.currentProduct);
+      this.currentProduct = {
+        name: null,
+        quantity: 0,
+        price: 0.0
+      };
     }
   }
 })

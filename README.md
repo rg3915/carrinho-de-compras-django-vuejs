@@ -307,3 +307,140 @@ touch myproject/core/static/css/style.css
 touch myproject/core/static/js/app.js
 ```
 
+Versão com ajustes de CSS:
+
+```html
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div id="app" class="text-center">
+  <div class="row">
+    <div class="col-10">
+      <form action="." method="POST">
+        <input id="id_customer" class="form-control" type="text" placeholder="Cliente" />
+      </form>
+
+      <div class="mt-4">
+        <table class="table table-hover table-borderless">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Quantidade</th>
+              <th>Preço</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody class="mytable">
+            <tr>
+              <td class="w40">
+                <input class="form-control" type="text" placeholder="Caneta azul" />
+              </td>
+              <td>
+                <input class="form-control text-center" type="number" min="0" placeholder="16" />
+              </td>
+              <td>
+                <div class="input-group mm-2">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">R$</span>
+                  </div>
+                  <input class="form-control" type="number" min="0" placeholder="2,05">
+                </div>
+              </td>
+              <td class="w15">
+                <div class="d-flex input-group mm-2">
+                  <div>R$</div>
+                  <div class="ml-auto">32,80</div>
+                </div>
+              </td>
+              <td>
+                <button class="btn btn-success">
+                  <i class="fa fa-plus"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr>
+
+        <table class="table table-hover table-borderless">
+          <tbody>
+            <tr v-for="cart in cartItems" :key="cart.id">
+              <td class="w40">
+                <input class="form-control" type="text" :value="[[ cart.product ]]" />
+              </td>
+              <td>
+                <input class="form-control text-center" type="number" min="0" :value="[[ cart.quantity ]]" />
+              </td>
+              <td>
+                <div class="input-group mm-2">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">R$</span>
+                  </div>
+                  <input class="form-control" type="number" min="0" step="0.01" :value="[[ cart.price ]]">
+                </div>
+              </td>
+              <td class="w15">
+                <div class="d-flex input-group mm-2">
+                  <div>R$</div>
+                  <div class="ml-auto">${ (cart.price * cart.quantity) | formatPrice }</div>
+                </div>
+              </td>
+              <td>
+                <button class="btn btn-link">
+                  <i class="fa fa-close close"></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="w40">
+                <input class="form-control" type="text" placeholder="Caneta azul" />
+              </td>
+              <td>
+                <input class="form-control text-center" type="number" min="0" placeholder="16" />
+              </td>
+              <td>
+                <div class="input-group mm-2">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">R$</span>
+                  </div>
+                  <input class="form-control" type="number" min="0" placeholder="2,05">
+                </div>
+              </td>
+              <td class="w15">
+                <div class="d-flex input-group mm-2">
+                  <div>R$</div>
+                  <div class="ml-auto">32,80</div>
+                </div>
+              </td>
+              <td>
+                <button class="btn btn-success">
+                  <i class="fa fa-plus"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="lead">
+              <th colspan="3" class="text-right">Total</th>
+              <th class="text-left">R$ <span class="pull-right">${ cartValue | formatPrice }</span></th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+  <script src="{% static 'js/app.js' %}"></script>
+{% endblock js %}
+```
+
