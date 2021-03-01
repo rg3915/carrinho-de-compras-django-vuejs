@@ -32,7 +32,7 @@ Os estáticos do VueJS via CDN estão declarados em `base.html`.
 ## Este projeto foi feito com:
 
 * [Python 3.8.2](https://www.python.org/)
-* [Django 2.2.16](https://www.djangoproject.com/)
+* [Django 2.2.19](https://www.djangoproject.com/)
 * [Bootstrap 4.0](https://getbootstrap.com/)
 * [VueJS 2.6.11](https://vuejs.org/)
 
@@ -60,29 +60,164 @@ python manage.py runserver
 
 ## Passo a passo
 
-* Criar `nav.html`
+### Criar o projeto inicial
 
 ```
-mkdir myproject/core/templates/includes
+git clone https://gist.github.com/b363f5c4a998f42901705b23ccf4b8e8.git /tmp/boilerplatesimple
+ls /tmp/boilerplatesimple
+cp /tmp/boilerplatesimple/boilerplatesimple.sh .
+source boilerplatesimple.sh
+# Após terminar de instalar delete o arquivo boilerplatesimple.sh
+rm -f boilerplatesimple.sh
+```
+
+### Configurar settings.py
+
+```python
+LANGUAGE_CODE = 'pt-br'
+
+TIME_ZONE = 'America/Sao_Paulo'
+```
+
+### Criar app shopping
+
+```
+python manage.py startapp shopping
+```
+
+E em `settings.py` faça
+
+```python
+INSTALLED_APPS = [
+    ...
+    'myproject.core',
+    'myproject.shopping',
+]
+```
+
+
+#### Criar modelo
+
+```python
+# shopping/models.py
+from django.db import models
+
+
+class Shop(models.Model):
+    customer = models.CharField('cliente', max_length=100)
+    created = models.DateTimeField('criado em', auto_now_add=True, auto_now=False)
+
+    class Meta:
+        ordering = ('-pk',)
+        verbose_name = 'compra'
+        verbose_name_plural = 'compras'
+
+    def __str__(self):
+        return self.customer
+
+
+class Product(models.Model):
+    name = models.CharField('nome', max_length=100, unique=True)
+    price = models.DecimalField('preço', max_digits=6, decimal_places=2)
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'produto'
+        verbose_name_plural = 'produtos'
+
+    def __str__(self):
+        return self.name
+
+    def to_dict(self):
+        return {
+            'value': self.pk,
+            'text': self.name,
+            'price': self.price
+        }
+
+
+class Cart(models.Model):
+    shop = models.ForeignKey(
+        Shop,
+        related_name='compras',
+        on_delete=models.CASCADE
+    )
+    product = models.ForeignKey(
+        Product,
+        related_name='products',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    quantity = models.PositiveIntegerField('quantidade')
+    price = models.DecimalField('preço', max_digits=6, decimal_places=2)
+
+    class Meta:
+        ordering = ('-pk',)
+        verbose_name = 'carrinho'
+        verbose_name_plural = 'carrinhos'
+
+    def __str__(self):
+        if self.shop:
+            return f'{self.shop.pk}-{self.pk}-{self.product}'
+        return str(self.pk)
+
+    def get_subtotal(self):
+        return self.price * (self.quantity or 0)
+```
+
+### Criar url e views
+
+```python
+# urls.py
+from django.urls import include, path
+from django.contrib import admin
+
+
+urlpatterns = [
+    path('', include('myproject.core.urls', namespace='core')),
+    # path('shopping/', include('myproject.shopping.urls', namespace='shopping')),
+    path('admin/', admin.site.urls),
+]
+```
+
+```python
+# core/urls.py
+from django.urls import path
+from myproject.core import views as v
+
+
+app_name = 'core'
+
+
+urlpatterns = [
+    path('', v.index, name='index'),
+]
+```
+
+```python
+# core/views.py
+from django.shortcuts import render
+
+
+def index(request):
+    return render(request, 'index.html')
+```
+
+### Criar os templates
+
+* Criar `nav.html`, `base.html` e `index.html`
+
+```
+mkdir -p myproject/core/templates/includes
 touch myproject/core/templates/includes/nav.html
-```
-
-* Criar `base.html`
-
-```
-touch myproject/core/templates/base.html
-```
-
-* Criar `index.html`
-
-```
-touch myproject/core/templates/index.html
+touch myproject/core/templates/{base,index}.html
 ```
 
 * Criar visualização para `shopping.html`
 
 ```python
-# views.py
+# shopping/views.py
 from django.shortcuts import render
 
 
@@ -467,20 +602,6 @@ def api_product(request):
     data = [item.to_dict() for item in products]
     response = {'data': data}
     return JsonResponse(response)
-```
-
-Em `shopping/models.py`
-
-```python
-class Product(models.Model):
-    ...
-
-    def to_dict(self):
-        return {
-            'value': self.pk,
-            'text': self.name,
-            'price': self.price
-        }
 ```
 
 Em `core/urls.py`
