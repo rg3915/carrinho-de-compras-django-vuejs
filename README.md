@@ -208,6 +208,100 @@ touch myproject/core/templates/includes/nav.html
 touch myproject/core/templates/{base,index}.html
 ```
 
+Editar `nav.html`
+
+```html
+<!-- includes/nav.html -->
+<!-- https://getbootstrap.com/docs/4.0/examples/starter-template/ -->
+<!-- https://github.com/JTruax/bootstrap-starter-template/blob/master/template/start.html -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="{% url 'core:index' %}">Carrinho de compras</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'core:index' %}">Home <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+```
+
+Editar `base.html`
+
+```html
+<!-- base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="https://www.djangoproject.com/favicon.ico">
+  <title>Carrinho de compras</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+  <!-- Font-awesome -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  <style>
+    body {
+      margin-top: 70px;
+    }
+  </style>
+
+</head>
+<body>
+
+  {% include "includes/nav.html" %}
+
+  <div class="container">
+    {% block content %}{% endblock content %}
+  </div>
+
+  <!-- VueJS -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+  <!-- axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  {% block js %}{% endblock js %}
+
+</body>
+</html>
+```
+
+Editar `index.html`
+
+```html
+<!-- index.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="jumbotron text-center">
+    <p>Este é um projeto feito com <a href="https://www.djangoproject.com/" target="_blank">Django</a> e <a href="https://vuejs.org/" target="_blank">VueJS</a>.</p>
+    <p>
+      <a href="https://github.com/rg3915/carrinho-de-compras-django-vuejs" target="_blank">Veja no GitHub</a>
+    </p>
+    <a class="btn btn-primary" href="{% url 'shopping:shopping' %}">Fazer uma compra</a>
+  </div>
+{% endblock content %}
+```
+
+Rodar a aplicação até aqui.
+
+> Talvez você tenha que tirar a url de index temporariamente.
+
+
 * Criar visualização para `shopping.html`
 
 ```python
@@ -220,14 +314,31 @@ def shopping(request):
     return render(request, template_name)
 ```
 
-```python
+```
 touch shopping/urls.py
+```
 
+```python
 # shopping/urls.py
-...
+from django.urls import path
+from myproject.shopping import views as v
+
+
+app_name = 'shopping'
+
+
 urlpatterns = [
     path('shopping/', v.shopping, name='shopping'),
 ]
+```
+
+Acrescente em `urls.py`
+
+```python
+# urls.py
+...
+path('shopping/', include('myproject.shopping.urls', namespace='shopping')),
+...
 ```
 
 ```
@@ -437,6 +548,40 @@ touch myproject/core/static/css/style.css
 touch myproject/core/static/js/app.js
 ```
 
+Editar `style.css`
+
+```css
+/* style.css */
+hr {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.mm-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.table {
+  margin-bottom: 0;
+}
+.table td {
+  padding: 0 .75rem;
+  vertical-align: middle;
+}
+.mytable tr td {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.w15 {
+  width: 15%;
+}
+.w40 {
+  width: 40%;
+}
+.close {
+  color: red;
+}
+```
+
 Versão com ajustes de CSS:
 
 ```html
@@ -574,6 +719,16 @@ Versão com ajustes de CSS:
 {% endblock js %}
 ```
 
+Mostrar
+
+```
+${ (cart.price * cart.quantity) | formatPrice }
+
+${ cartValue | formatPrice }
+```
+
+Mostrar a aplicação rodando.
+
 
 Adicione uma nova rota em `core/urls.py`
 
@@ -599,6 +754,45 @@ def api_product(request):
     response = {'data': data}
     return JsonResponse(response)
 ```
+
+Editar `shopping/admin.py`
+
+```python
+# shopping/admin.py
+from django.contrib import admin
+from .models import Shop, Product, Cart
+
+
+class CartInline(admin.TabularInline):
+    model = Cart
+    extra = 0
+
+
+@admin.register(Shop)
+class ShopAdmin(admin.ModelAdmin):
+    inlines = (CartInline,)
+    list_display = ('__str__', 'created')
+    search_fields = ('customer',)
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'price')
+    search_fields = ('name',)
+
+
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'shop', 'quantity', 'price')
+    search_fields = ('shop__customer', 'product__name')
+```
+
+Mostrar a url `/api/products/`.
+
+Cadastrar alguns produtos em admin.
+
+Para isso eu criei um [CSV](fix/produtos.csv) e um comando [create_data](myproject/core/management/commands/create_data.py) pra criar os dados.
+
 
 Em `core/urls.py`
 
