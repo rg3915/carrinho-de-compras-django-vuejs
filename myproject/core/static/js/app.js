@@ -5,6 +5,10 @@ const endpoint = 'http://localhost:8000/'
 
 Vue.filter("formatPrice", value => (value / 1).toFixed(2).replace('.', ',').toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))
 
+Vue.use(VueToast, {
+  position: 'top-right'
+})
+
 var app = new Vue({
   el: '#app',
   delimiters: ['${', '}'],
@@ -34,7 +38,32 @@ var app = new Vue({
     }
   },
   methods: {
+    validateForm() {
+      if (this.cartItems.length == 0) {
+        Vue.$toast.error('O carrinho está vazio.')
+        return false
+      }
+      if (this.cartItems.length == 1 & this.cartItems[0].pk === null) {
+        Vue.$toast.error('Favor escolher um produto.')
+        return false
+      }
+      if (this.cartItems.length == 1 & this.cartItems[0].quantity == 0) {
+        Vue.$toast.error('Quantidade deve ser maior que zero.')
+        return false
+      }
+      if (this.cartItems.length == 1 & this.cartItems[0].price == 0) {
+        Vue.$toast.error('Preço deve ser maior que zero.')
+        return false
+      }
+      if (!this.form.customer) {
+        Vue.$toast.error('Favor digitar o nome do cliente.')
+        return false
+      }
+      return true
+    },
     submitForm() {
+      if (!this.validateForm()) return
+
       let bodyFormData = new FormData();
 
       bodyFormData.append('products', JSON.stringify(this.cartItems));
