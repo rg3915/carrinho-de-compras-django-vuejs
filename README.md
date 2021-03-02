@@ -202,6 +202,7 @@ def index(request):
 * Criar `nav.html`, `base.html` e `index.html`
 
 ```
+cd ..
 mkdir -p myproject/core/templates/includes
 touch myproject/core/templates/includes/nav.html
 touch myproject/core/templates/{base,index}.html
@@ -220,7 +221,9 @@ def shopping(request):
 ```
 
 ```python
-# urls.py
+touch shopping/urls.py
+
+# shopping/urls.py
 ...
 urlpatterns = [
     path('shopping/', v.shopping, name='shopping'),
