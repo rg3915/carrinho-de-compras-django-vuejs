@@ -71,18 +71,11 @@ source boilerplatesimple.sh
 rm -f boilerplatesimple.sh
 ```
 
-### Configurar settings.py
-
-```python
-LANGUAGE_CODE = 'pt-br'
-
-TIME_ZONE = 'America/Sao_Paulo'
-```
-
 ### Criar app shopping
 
 ```
-python manage.py startapp shopping
+cd myproject
+python ../manage.py startapp shopping
 ```
 
 E em `settings.py` faça
