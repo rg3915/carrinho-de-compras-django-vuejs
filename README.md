@@ -347,6 +347,7 @@ touch myproject/shopping/templates/shopping.html
 ```
 
 ```html
+<!-- shopping.html -->
 {% extends "base.html" %}
 
 {% block content %}
@@ -585,6 +586,7 @@ hr {
 Versão com ajustes de CSS:
 
 ```html
+<!-- shopping.html -->
 {% extends "base.html" %}
 {% load static %}
 
@@ -727,7 +729,141 @@ ${ (cart.price * cart.quantity) | formatPrice }
 ${ cartValue | formatPrice }
 ```
 
-Mostrar a aplicação rodando.
+> Mostrar a aplicação rodando.
+
+Versão final
+
+```html
+<!-- shopping.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div id="app" class="text-center">
+  <div class="row">
+    <div class="col-10">
+      <form action="." method="POST">
+        <input id="customer" class="form-control" type="text" v-model="form.customer" placeholder="Cliente" />
+      </form>
+
+      <div class="mt-4">
+        <table class="table table-hover table-borderless">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Quantidade</th>
+              <th>Preço</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody class="mytable">
+            <tr>
+              <td class="w40">
+                <select id="productName" class="form-control" v-model="currentProduct.pk">
+                  <option selected value="">---</option>
+                  <option v-for="product in products" :key="product.value" :value="product.value">${ product.text }</option>
+                </select>
+              </td>
+              <td>
+                <input id="productQuantity" class="form-control text-center" type="number" min="0" v-model="currentProduct.quantity" />
+              </td>
+              <td>
+                <div class="input-group mm-2">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">R$</span>
+                  </div>
+                  <input id="productPrice" class="form-control" type="number" min="0" step="0.01" v-model="currentProduct.price">
+                </div>
+              </td>
+              <td class="w15">
+                <div class="d-flex input-group mm-2">
+                  <div>R$</div>
+                  <div class="ml-auto">${ (currentProduct.price * currentProduct.quantity) | formatPrice }</div>
+                </div>
+              </td>
+              <td>
+                <button id="btnSubmit" class="btn btn-success" @click="addProduct">
+                  <i class="fa fa-plus"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr>
+
+        <table id="myTable" class="table table-hover table-borderless">
+          <tbody>
+            <tr v-for="(cart, i) in cartItems" :key="i">
+              <td class="w40">
+                <select :id="'name'+i" class="form-control" v-model="cart.pk">
+                  <option selected value="">---</option>
+                  <option v-for="product in products" :key="product.value" :value="product.value">${ product.text }</option>
+                </select>
+              </td>
+              <td>
+                <input :id="'quantity'+i" class="form-control text-center" type="number" min="0" v-model="cart.quantity" />
+              </td>
+              <td>
+                <div class="input-group mm-2">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">R$</span>
+                  </div>
+                  <input :id="'price'+i" class="form-control" type="number" min="0" step="0.01" v-model="cart.price" />
+                </div>
+              </td>
+              <td class="w15">
+                <div class="d-flex input-group mm-2">
+                  <div>R$</div>
+                  <div class="ml-auto">${ (cart.price * cart.quantity) | formatPrice }</div>
+                </div>
+              </td>
+              <td>
+                <button class="btn btn-link">
+                  <i class="fa fa-close close" @click="deleteProduct(cart)"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot class="lead">
+            <tr>
+              <th colspan="3" class="text-right">Total</th>
+              <th class="text-left">R$ <span class="pull-right">${ cartValue | formatPrice }</span></th>
+              <th></th>
+            </tr>
+            <tr>
+              <th class="text-left">
+                <button id="btnAddLine" class="btn btn-success" @click="addLine">
+                  <i class="fa fa-plus"></i> Adicionar
+                </button>
+              </th>
+              <th colspan="2" class="text-right">
+                <button id="btnSave" class="btn btn-primary" @click="submitForm">
+                  <i class="fa fa-floppy-o"></i> Salvar
+                </button>
+              </th>
+              <th class="text-right">
+                <button id="btnCancel" class="btn btn-danger" @click="resetForm">
+                  <i class="fa fa-close"></i> Cancelar
+                </button>
+              </th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+  <script src="{% static 'js/app.js' %}"></script>
+{% endblock js %}
+```
 
 
 Adicione uma nova rota em `core/urls.py`
@@ -793,6 +929,93 @@ Cadastrar alguns produtos em admin.
 
 Para isso eu criei um [CSV](fix/produtos.csv) e um comando [create_data](myproject/core/management/commands/create_data.py) pra criar os dados.
 
+Em `core/static/js/app.js`
+
+```js
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+axios.defaults.xsrfCookieName = 'csrftoken'
+
+const endpoint = 'http://localhost:8000/'
+
+Vue.filter("formatPrice", value => (value / 1).toFixed(2).replace('.', ',').toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))
+
+var app = new Vue({
+  el: '#app',
+  delimiters: ['${', '}'],
+  data: {
+    form: {
+      customer: null
+    },
+    cartItems: [],
+    currentProduct: {
+      pk: null,
+      quantity: 0,
+      price: 0.0
+    },
+    products: []
+  },
+  mounted() {
+    axios.get(endpoint + 'api/products/')
+      .then(response => {
+        this.products = response.data.data;
+      })
+  },
+  computed: {
+    cartValue() {
+      return this.cartItems.reduce((prev, curr) => {
+        return prev + (curr.price * curr.quantity)
+      }, 0).toFixed(2)
+    }
+  },
+  methods: {
+    submitForm() {
+      let bodyFormData = new FormData();
+
+      bodyFormData.append('products', JSON.stringify(this.cartItems));
+      bodyFormData.append('customer', JSON.stringify(this.form.customer));
+
+      axios.post('/api/shopping-items/add/', bodyFormData)
+        .then((res) => {
+          location.href = endpoint + 'shopping/cart-items/' + res.data.data
+        })
+    },
+    addProduct() {
+      this.cartItems.push(this.currentProduct)
+      this.currentProduct = {
+        pk: null,
+        quantity: 0,
+        price: 0.0
+      }
+    },
+    addLine() {
+      this.cartItems.push(
+        {
+          pk: null,
+          quantity: 0,
+          price: 0.0
+        }
+      )
+    },
+    deleteProduct(item) {
+      var idx = this.cartItems.indexOf(item)
+      this.cartItems.splice(idx, 1)
+    },
+    resetForm() {
+      this.form = {
+        customer: null
+      }
+      this.cartItems = []
+      this.currentProduct = {
+        pk: null,
+        quantity: 0,
+        price: 0.0
+      }
+    }
+  }
+})
+```
+
+
 
 Em `core/urls.py`
 
@@ -853,3 +1076,69 @@ def cart_items(request, pk):
     return render(request, template_name, context)
 ```
 
+E crie `cart_items.html`
+
+```
+touch myproject/shopping/templates/cart_items.html
+```
+
+```html
+<!-- cart_items.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div id="app" class="text-center">
+  <div class="row">
+    <div class="col-10">
+      <div class="mt-4">
+        <h3 class="text-left">Confirmação de compra</h3>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th class="text-left">Produto</th>
+              <th>Quantidade</th>
+              <th>Preço</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for object in object_list %}
+              <tr>
+                <td class="text-left">{{ object.product.name }}</td>
+                <td>{{ object.quantity }}</td>
+                <td>
+                  <div class="d-flex">
+                    <div>R$</div>
+                    <div class="ml-auto">{{ object.price }}</div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex">
+                    <div>R$</div>
+                    <div class="ml-auto">{{ object.get_subtotal }}</div>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th colspan="3" class="text-right">Total</th>
+              <th>
+                <div class="d-flex">
+                  <div>R$</div>
+                  <div class="ml-auto">{{ total }}</div>
+                </div>
+              </th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+```
