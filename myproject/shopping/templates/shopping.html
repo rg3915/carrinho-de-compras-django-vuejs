@@ -24,7 +24,7 @@
           <tbody class="mytable">
             <tr>
               <td class="w40">
-                <select id="productName" class="form-control" v-model="currentProduct.pk">
+                <select id="productName" class="form-control" v-model="currentProduct.pk" @change="onProductChange">
                   <option selected value="">---</option>
                   <option v-for="product in products" :key="product.value" :value="product.value">${ product.text }</option>
                 </select>

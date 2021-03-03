@@ -38,6 +38,11 @@ var app = new Vue({
     }
   },
   methods: {
+    onProductChange() {
+      const price = this.products.find(p => p.value == this.currentProduct.pk).price;
+      
+      this.currentProduct.price = price;
+    },
     validateForm() {
       if (this.cartItems.length == 0) {
         Vue.$toast.error('O carrinho está vazio.')
