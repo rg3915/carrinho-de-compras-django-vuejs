@@ -61,15 +61,15 @@ var app = new Vue({
       }
       return true
     },
-    onProductChange() {
+    onProductChange(cart, e) {
+      if (cart) {
+        const pk = e.target.value;
+        const price = this.products.find(p => p.value == pk).price;
+        cart.price = price;
+        return; 
+      }
       const price = this.products.find(p => p.value == this.currentProduct.pk).price;
       this.currentProduct.price = price;
-    },
-    onProductChange2(e) {
-      const pk = e.target.value;
-      const price = this.products.find(p => p.value == pk).price;
-      console.log(price);
-      // this.currentProduct.price = price;
     },
     addProduct() {
       this.cartItems.push(this.currentProduct)

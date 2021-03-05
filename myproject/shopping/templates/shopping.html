@@ -24,7 +24,7 @@
           <tbody class="mytable">
             <tr>
               <td class="w40">
-                <select id="productName" class="form-control" v-model="currentProduct.pk" @change="onProductChange">
+                <select id="productName" class="form-control" v-model="currentProduct.pk" @change="onProductChange()">
                   <option selected value="">---</option>
                   <option v-for="product in products" :key="product.value" :value="product.value">${ product.text }</option>
                 </select>
@@ -61,7 +61,7 @@
           <tbody>
             <tr v-for="(cart, i) in cartItems" :key="i">
               <td class="w40">
-                <select :id="'name'+i" class="form-control" v-model="cart.pk" @change="onProductChange2($event)">
+                <select :id="'name'+i" class="form-control" v-model="cart.pk" @change="onProductChange(cart, $event)">
                   <option selected value="">---</option>
                   <option v-for="product in products" :key="product.value" :value="product.value">${ product.text }</option>
                 </select>
