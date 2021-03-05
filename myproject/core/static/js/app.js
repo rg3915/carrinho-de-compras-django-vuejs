@@ -38,11 +38,6 @@ var app = new Vue({
     }
   },
   methods: {
-    onProductChange() {
-      const price = this.products.find(p => p.value == this.currentProduct.pk).price;
-      
-      this.currentProduct.price = price;
-    },
     validateForm() {
       if (this.cartItems.length == 0) {
         Vue.$toast.error('O carrinho está vazio.')
@@ -66,18 +61,15 @@ var app = new Vue({
       }
       return true
     },
-    submitForm() {
-      if (!this.validateForm()) return
-
-      let bodyFormData = new FormData();
-
-      bodyFormData.append('products', JSON.stringify(this.cartItems));
-      bodyFormData.append('customer', JSON.stringify(this.form.customer));
-
-      axios.post('/api/shopping-items/add/', bodyFormData)
-        .then((res) => {
-          location.href = endpoint + 'shopping/cart-items/' + res.data.data
-        })
+    onProductChange() {
+      const price = this.products.find(p => p.value == this.currentProduct.pk).price;
+      this.currentProduct.price = price;
+    },
+    onProductChange2(e) {
+      const pk = e.target.value;
+      const price = this.products.find(p => p.value == pk).price;
+      console.log(price);
+      // this.currentProduct.price = price;
     },
     addProduct() {
       this.cartItems.push(this.currentProduct)
@@ -99,6 +91,19 @@ var app = new Vue({
     deleteProduct(item) {
       var idx = this.cartItems.indexOf(item)
       this.cartItems.splice(idx, 1)
+    },
+    submitForm() {
+      if (!this.validateForm()) return
+
+      let bodyFormData = new FormData();
+
+      bodyFormData.append('products', JSON.stringify(this.cartItems));
+      bodyFormData.append('customer', JSON.stringify(this.form.customer));
+
+      axios.post('/api/shopping-items/add/', bodyFormData)
+        .then((res) => {
+          location.href = endpoint + 'shopping/cart-items/' + res.data.data
+        })
     },
     resetForm() {
       this.form = {
