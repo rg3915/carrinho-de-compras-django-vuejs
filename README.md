@@ -61,6 +61,20 @@ python manage.py runserver
 
 ## Apresentação
 
+```
+git clone --depth 1 --branch 0.5 https://github.com/rg3915/carrinho-de-compras-django-vuejs.git
+cd carrinho-de-compras-django-vuejs
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python contrib/env_gen.py
+python manage.py migrate
+python manage.py create_data
+python manage.py createsuperuser --username="admin" --email=""
+python manage.py runserver
+```
+
+Ver o [commit/c2f498e](https://github.com/rg3915/carrinho-de-compras-django-vuejs/commit/c2f498e275afdea0a750a80fec680c96e48abb5c).
 
 
 
