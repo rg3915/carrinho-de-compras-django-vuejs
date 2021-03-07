@@ -26,12 +26,12 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-    # def to_dict(self):
-    #     return {
-    #         'value': self.pk,
-    #         'text': self.name,
-    #         'price': self.price
-    #     }
+    def to_dict(self):
+        return {
+            'value': self.pk,
+            'text': self.name,
+            'price': self.price
+        }
 
 
 class Cart(models.Model):
